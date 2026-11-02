@@ -1,0 +1,50 @@
+import { Box, AppBar, Toolbar, IconButton, Typography, Button, Container, MenuItem, MenuList } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
+import React from 'react'
+import { Group } from '@mui/icons-material'
+
+export default function NavBar() {
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static" sx={
+        {backgroundImage: 'linear-gradient(135deg, #182a73 0%, #218aae 69%, #20a7ac 89%)'       
+        }}>
+        
+        <Container maxWidth='xl'>
+          <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
+            
+            {/* Opened the MenuList here so EVERYTHING inside has access to the MenuListContext */}
+            <MenuList sx={{display: 'flex', gap: 2, width: '100%', alignItems: 'center'}}>
+              
+              <Box>
+                <MenuItem>
+                    <Group fontSize= 'large'/>
+                    <Typography variant= "h4" sx={{fontWeight: 'bold'}}>Reactivities</Typography>
+                </MenuItem>
+              </Box>
+
+              <Box sx={{display: 'flex'}}>
+                <MenuItem sx={{fontSize: '1.2rem', textTransform: 'uppercase', fontWeight: 'bold'               
+                }}>
+                    Activities
+                </MenuItem>
+                <MenuItem sx={{fontSize: '1.2rem', textTransform: 'uppercase', fontWeight: 'bold'               
+                }}>
+                    About
+                </MenuItem>
+                <MenuItem sx={{fontSize: '1.2rem', textTransform: 'uppercase', fontWeight: 'bold'               
+                }}>
+                    Contact
+                </MenuItem>                 
+              </Box>
+
+            </MenuList> {/* Correctly closing the MenuList wrapper here */}
+
+            <Button size="large" variant="contained" color="warning" sx={{ whiteSpace: 'nowrap'}}>Create Activity</Button>
+          </Toolbar>
+        </Container>
+     
+      </AppBar>
+    </Box>
+  )
+}
