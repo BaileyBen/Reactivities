@@ -3,7 +3,11 @@ import MenuIcon from '@mui/icons-material/Menu'
 import React from 'react'
 import { Group } from '@mui/icons-material'
 
-export default function NavBar() {
+type Props = {
+  openForm: () => void;
+}
+
+export default function NavBar({openForm}: Props) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={
@@ -40,7 +44,8 @@ export default function NavBar() {
 
             </MenuList> {/* Correctly closing the MenuList wrapper here */}
 
-            <Button size="large" variant="contained" color="warning" sx={{ whiteSpace: 'nowrap'}}>Create Activity</Button>
+            <Button onClick={openForm}size="large" variant="contained" color="warning" sx={{ whiteSpace: 'nowrap'}}>
+              Create Activity</Button>
           </Toolbar>
         </Container>
      
