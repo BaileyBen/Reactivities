@@ -11,6 +11,7 @@ export default function ActivityCard({activity, selectActivity, deleteActivity}:
   return (
     <Card sx={{borderRadius: 3}}>
 <CardContent>
+         <Typography variant="h6">{activity.title}</Typography>
         <Typography sx={{color: 'text.secondary', mb: 1}}>{activity.date}</Typography>
         <Typography variant="body2">{activity.description}</Typography>
         <Typography variant="subtitle1">{activity.city} / {activity.venue}</Typography>
