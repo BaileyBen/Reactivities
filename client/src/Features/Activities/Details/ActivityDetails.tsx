@@ -1,15 +1,14 @@
+// 1. REMOVE 'Link' from the @mui/material imports line
 import { Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material"
 import { useActivities } from "../../../Lib/Hooks/useActivities"
 
-type Props = {
-    selectedActivity: Activity
-    cancelSelectActivity: () => void
-    openForm: (id: string) => void
-}
+// 2. IMPORT 'Link' and 'useNavigate' from 'react-router-dom' instead
+import { Link, useNavigate } from "react-router-dom"
 
-export default function ActivityDetails({selectedActivity, cancelSelectActivity, openForm}: Props) {
-    const {activities} = useActivities();
-    const activity = activities?.find(x=> x.id === selectedActivity.id);
+
+export default function ActivityDetails() {
+    const navigate = useNavigate();
+    const activity ={} as Activity;
 
     if (!activity) return <Typography>Loading...</Typography>
 
@@ -24,8 +23,8 @@ export default function ActivityDetails({selectedActivity, cancelSelectActivity,
             <Typography variant="body1">{activity.description}</Typography>
         </CardContent>
         <CardActions>
-            <Button onClick={() => openForm(activity.id)}color="primary">Edit</Button>
-            <Button onClick={cancelSelectActivity} color="inherit">Cancel</Button>
+             <Button component={Link} to = {`/activities/${activity.id}`} color="primary">Edit</Button>
+            <Button onClick={() => navigate('/activities')} color="inherit">Cancel</Button>
         </CardActions>
     </Card>
   )
