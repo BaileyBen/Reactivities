@@ -9,15 +9,19 @@ import '@fontsource/roboto/700.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { router } from './App/Router/Routes';
+import { store, StoreContext } from './Lib/stores/store';
 
-const queryClient = new QueryClient
+const queryClient = new QueryClient();
 
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
-    <RouterProvider router={router}/>
-    </QueryClientProvider>
+    {/* 3. Added the required value prop to your context */}
+    <StoreContext.Provider value={store}> 
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router}/>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </StoreContext.Provider>
   </StrictMode>,
 )

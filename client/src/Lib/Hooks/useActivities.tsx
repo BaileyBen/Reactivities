@@ -6,6 +6,7 @@
 // useQueryClient: Provides global access to the cache container, allowing us to clear/refresh cached data.
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import agent from "../api/agent";
+import { useLocation } from "react-router";
 
 // Custom Hook Wrapper: Encapsulates all React Query logic so your components can share it instantly.
 // Parameter (id?): Marked optional with '?' so it works on both list views (no ID) and detail views (has ID).
@@ -13,16 +14,15 @@ export const useActivities = (id?: string) => {
     
     // Instantiating the queryClient to allow cache invalidation across mutations down below.
     const queryClient = useQueryClient();
-    
-    // ===================================================================
-    // 1. FETCH ALL ACTIVITIES (HTTP GET)
-    // ===================================================================
+    const location = useLocation();
+
     const {data: activities, isPending} = useQuery({ // stores raw data from api into activities
     queryKey: ['activities'], // unique locker key identifying this specific global cache list
     queryFn: async () => { // asynchronous query function that actually executes the API network request
       const response = await agent.get<Activity[]>('/activities') // fetches typing-enforced Activity arrays
       return response.data // returns the raw JSON payload to update the cached 'activities' state variable
-    }
+    },
+    enabled: !id && location.pathname === '/activities'
   });
 
   // ===================================================================

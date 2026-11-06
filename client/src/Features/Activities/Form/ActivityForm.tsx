@@ -78,8 +78,7 @@ export default function ActivityForm() {
             Ternary operator checking if 'activity' exists in state.
             If true, text displays 'Edit activity'. If false, it displays 'Create activity'. */}
         <Typography variant="h5" gutterBottom color="primary">
-        {activity? 'Edit activity': 'Create activity'}
-            Create Activity
+        {activity? 'Edit activity': 'Create activity'}       
         </Typography>
         
         {/* Box component='form' renders a semantic HTML <form> element while giving you access to MUI 'sx' flex layout spacing */}
