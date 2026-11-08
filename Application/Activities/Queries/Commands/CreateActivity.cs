@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Activities.DTOs;
+using AutoMapper;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -12,16 +15,19 @@ namespace Application.Activities.Queries.Commands
     {
         public class Command : IRequest<string>
         {
-            public required TheActivity Activity { get; set; }
+            public required CreateActivityDto ActivityDto { get; set; }
         }
 
-        public class Handler(AppDbContext context) : IRequestHandler<Command, string> {
+        public class Handler(AppDbContext context, IMapper mapper, IValidator<Command> validator) : IRequestHandler<Command, string> {
             public async Task<string> Handle(Command request, CancellationToken cancellationToken)
             {
-                context.Activities.Add(request.Activity);
+                
+                var activity = mapper.Map<TheActivity>(request.ActivityDto);
+
+                context.Activities.Add(activity);
 
                 await context.SaveChangesAsync(cancellationToken);
-                return request.Activity.Id;
+                return activity.Id;
             }
         }
     }

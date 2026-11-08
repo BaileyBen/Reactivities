@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Activities.DTOs;
 using Application.Activities.Queries;
 using Application.Activities.Queries.Commands;
 using Domain;
@@ -23,13 +24,14 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TheActivity>> GetActivityDetail(string id)
         {
-            return await Mediator.Send(new GetActivityDetails.Query{Id = id});
+            return HandleResult(await Mediator.Send(new GetActivityDetails.Query{Id = id}));
+        
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> CreateActivity(TheActivity activity)
+        public async Task<ActionResult<string>> CreateActivity(CreateActivityDto activityDto)
         {
-            return await Mediator.Send(new CreateActivity.Command{Activity = activity});
+            return await Mediator.Send(new CreateActivity.Command{ActivityDto = activityDto});
         }
 
         [HttpPut]
