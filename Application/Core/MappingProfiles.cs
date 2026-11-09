@@ -14,6 +14,7 @@ namespace Application.Core
         {
             CreateMap<TheActivity, TheActivity>();
             CreateMap<CreateActivityDto, TheActivity>();
+            CreateMap<EditActivityDto, TheActivity>();
         }
     }
 }

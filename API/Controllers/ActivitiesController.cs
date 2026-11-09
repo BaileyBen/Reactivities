@@ -24,6 +24,7 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TheActivity>> GetActivityDetail(string id)
         {
+            //throw new Exception("Server test error");
             return HandleResult(await Mediator.Send(new GetActivityDetails.Query{Id = id}));
         
         }
@@ -31,22 +32,19 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> CreateActivity(CreateActivityDto activityDto)
         {
-            return await Mediator.Send(new CreateActivity.Command{ActivityDto = activityDto});
+            return HandleResult(await Mediator.Send(new CreateActivity.Command{ActivityDto = activityDto}));
         }
 
         [HttpPut]
-        public async Task<ActionResult> EditActivity(TheActivity activity)
+        public async Task<ActionResult> EditActivity(EditActivityDto activity)
         {
-            await Mediator.Send(new EditActivity.Command{Activity = activity});
-            return NoContent();
+            return HandleResult(await Mediator.Send(new EditActivity.Command{ActivityDto = activity}));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteActivity(string id)
         {
-            await Mediator.Send(new DeleteActivity.Command{Id = id});
-
-            return Ok();
+            return HandleResult(await Mediator.Send(new DeleteActivity.Command{Id = id}));
         }
     }
 }
