@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { router } from './App/Router/Routes';
 import { store, StoreContext } from './Lib/stores/store';
+import { ToastContainer } from 'react-toastify';
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,11 @@ createRoot(document.getElementById('root')!).render(
     {/* 3. Added the required value prop to your context */}
     <StoreContext.Provider value={store}> 
       <QueryClientProvider client={queryClient}>
+        <ToastContainer position='bottom-right'
+        hideProgressBar theme='colored'
+        aria-label={undefined}>
+
+        </ToastContainer>
         <RouterProvider router={router}/>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
