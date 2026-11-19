@@ -1,45 +1,67 @@
 import { CalendarToday, Info, Place } from "@mui/icons-material";
-import { Divider, Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Divider, Paper, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid"; // Use 'Grid' from '@mui/material' if you are on MUI v7+
 import { formatDate } from "../../../Lib/Types/util/util";
-
+import type { Activity } from "../../../Lib/Types";
+import MapComponent from "../../../App/shared/components/MapComponent";
+import { useState } from "react";
 
 type Props = {
-    activity: Activity
-}
+  activity: Activity;
+};
 
-export default function ActivityInfo({activity}: Props) {
-    return (
-        <Paper sx={{ mb: 2 }}>
+export default function ActivityInfo({ activity }: Props) {
+  const [mapOpen, setMapOpen] = useState(false);
 
-            <Grid container sx={{alignItems: "center", pl: 2, py: 1}}>
-                <Grid size={1}>
-                    <Info color="info" fontSize="large" />
-                </Grid>
-                <Grid size={11}>
-                    <Typography>{activity.description}</Typography>
-                </Grid>
-            </Grid>
-            <Divider />
-            <Grid container sx={{alignItems: "center", pl: 2, py: 1}}>
-                <Grid size={1}>
-                    <CalendarToday color="info" fontSize="large" />
-                </Grid>
-                <Grid size={11}>
-                    <Typography>{formatDate(activity.date)}</Typography>
-                </Grid>
-            </Grid>
-            <Divider />
+  return (
+    <Paper sx={{ mb: 2 }}>
+      <Grid container sx={{ alignItems: "center", pl: 2, py: 1 }}>
+        <Grid size={1}>
+          <Info color="info" fontSize="large" />
+        </Grid>
+        <Grid size={11}>
+          <Typography>{activity.description}</Typography>
+        </Grid>
+      </Grid>
+      <Divider />
+      <Grid container sx={{ alignItems: "center", pl: 2, py: 1 }}>
+        <Grid size={1}>
+          <CalendarToday color="info" fontSize="large" />
+        </Grid>
+        <Grid size={11}>
+          <Typography>{formatDate(activity.date)}</Typography>
+        </Grid>
+      </Grid>
+      <Divider />
 
-            <Grid container sx={{alignItems: "center", pl: 2, py: 1}}>
-                <Grid size={1}>
-                    <Place color="info" fontSize="large" />
-                </Grid>
-                <Grid size={11}>
-                    <Typography>
-                        {activity.venue}, {activity.city}
-                    </Typography>
-                </Grid>
-            </Grid>
-        </Paper>
-    )
+      <Grid container sx={{ alignItems: "center", pl: 2, py: 1 }}>
+        <Grid size={1}>
+          <Place color="info" fontSize="large" />
+        </Grid>
+        <Grid
+          size={11}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography>
+            {activity.venue}, {activity.city}
+          </Typography>
+          <Button onClick={() => setMapOpen(!mapOpen)}>
+            {mapOpen ? "Hide map" : "Show map"}
+          </Button>
+        </Grid>
+      </Grid>
+      {mapOpen && (
+        <Box sx={{ height: 400, zIndex: 1000, display: "block" }}>
+          <MapComponent
+            position={[activity.latitude, activity.longitude]}
+            venue={activity.venue}
+          />
+        </Box>
+      )}
+    </Paper>
+  );
 }

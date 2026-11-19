@@ -11,14 +11,16 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { router } from './App/Router/Routes';
 import { store, StoreContext } from './Lib/stores/store';
 import { ToastContainer } from 'react-toastify';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 
 const queryClient = new QueryClient();
 
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {/* 3. Added the required value prop to your context */}
-    <StoreContext.Provider value={store}> 
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <StoreContext.Provider value={store}> 
       <QueryClientProvider client={queryClient}>
         <ToastContainer position='bottom-right'
         hideProgressBar theme='colored'
@@ -29,5 +31,7 @@ createRoot(document.getElementById('root')!).render(
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </StoreContext.Provider>
+    </LocalizationProvider>
+    {/* 3. Added the required value prop to your context */}
   </StrictMode>,
 )

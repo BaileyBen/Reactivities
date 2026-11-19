@@ -8,7 +8,7 @@ namespace Application.Activities.DTOs
 {
     public class CreateActivityDto : BaseActivityDto
     {
-      public required string Id { get; set; }
+
     
     }
 }

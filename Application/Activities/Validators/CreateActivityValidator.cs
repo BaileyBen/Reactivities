@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application.Activities.DTOs;
 using Application.Activities.Queries.Commands;
-using FluentValidation;
 
 namespace Application.Activities.Validators
 {
@@ -12,8 +7,6 @@ namespace Application.Activities.Validators
     {
         public CreateActivityValidator() : base(x => x.ActivityDto)
         {
-            RuleFor( x=> x.ActivityDto.Id)
-            .NotEmpty().WithMessage("Id is required");
         }
     }
 }
