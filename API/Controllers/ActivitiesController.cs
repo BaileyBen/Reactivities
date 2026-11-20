@@ -7,6 +7,7 @@ using Application.Activities.Queries;
 using Application.Activities.Queries.Commands;
 using Domain;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence;

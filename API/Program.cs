@@ -2,7 +2,11 @@ using API.Middleware;
 using Application.Activities.Queries;
 using Application.Activities.Validators;
 using Application.Core;
+using Domain;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Persistence;
@@ -11,7 +15,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(opt =>
+{
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    opt.Filters.Add(new AuthorizeFilter(policy));
+});
 builder.Services.AddDbContext<AppDbContext>(opt =>
 opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -25,6 +33,12 @@ builder.Services.AddMediatR(x =>
 builder.Services.AddAutoMapper(cfg => {},typeof(MappingProfiles).Assembly);
 builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
 builder.Services.AddTransient<ExceptionMiddleware>();
+builder.Services.AddIdentityApiEndpoints<User>(opt =>
+{
+    opt.User.RequireUniqueEmail = true;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<AppDbContext>();
 
 var app = builder.Build();
 
@@ -34,7 +48,14 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod()
+.AllowCredentials()
 .WithOrigins("http://localhost:3000", "https://localhost:3000"));
+
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapGroup("api").MapIdentityApi<User>();
+
+
 app.MapControllers();
 
 using var scope = app.Services.CreateScope();
@@ -43,8 +64,9 @@ var services = scope.ServiceProvider;
 try
 {
     var context = services.GetRequiredService<AppDbContext>();
+    var userManager = services.GetRequiredService<UserManager<User>>();
     await context.Database.MigrateAsync();
-    await DbInitalizer.SeedData(context);
+    await DbInitalizer.SeedData(context, userManager);
 }
     catch (Exception ex)
 {
