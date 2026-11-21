@@ -17,14 +17,16 @@ import { useActivities } from "../../../Lib/Hooks/useActivities";
 export default function ActivityList() {
  // 1. DATA CONSUMPTION
  // Pulling the entire array of 'activities' and the asynchronous server loading state 'isPending'.
- const {activities, isPending} = useActivities();
+ const {activities, isLoading} = useActivities();
 
   // 2. DATA SENSITIVITY GUARD CLAUSE
   // If the server network request has not finished executing (isPending), or if the cache returns null/undefined, 
   // immediately escape execution and display a clean loading fallback indicator.
   // This explicitly keeps the .map() operation below from running on non-existent array records, avoiding UI page crashes.
-  if (!activities || isPending) return <Typography>Loading...</Typography>
-  
+  if (isLoading) return <Typography>Loading...</Typography>
+  if (!activities) return <Typography>No activities found</Typography>
+
+
   return (
     // Box Layout Wrapper: Formats the inner list vertically using simple CSS flex layouts.
     // display: 'flex' converts layout mechanics to Flexbox models.

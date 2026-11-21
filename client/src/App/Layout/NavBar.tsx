@@ -13,9 +13,12 @@ import { NavLink } from "react-router-dom";
 import MenuItemLink from "../shared/components/MenuItemLink";
 import { useStore } from "../../Lib/Hooks/useStore";
 import { Observer } from "mobx-react-lite";
+import { useAccount } from "../../Lib/Hooks/useAccount";
+import UserMenu from "./UserMenu";
 
 export default function NavBar() {
-    const {uiStore} = useStore()
+  const { uiStore } = useStore();
+  const { currentUser } = useAccount();
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -23,7 +26,7 @@ export default function NavBar() {
         sx={{
           backgroundImage:
             "linear-gradient(135deg, #182a73 0%, #218aae 69%, #20a7ac 89%)",
-            position: "relative"
+          position: "relative",
         }}
       >
         <Container maxWidth="xl">
@@ -59,42 +62,40 @@ export default function NavBar() {
               {/* flexGrow: 1 pushes the remaining items away, ensuring your user menu sits nicely on the right side */}
               <Box sx={{ display: "flex", flexGrow: 1, gap: 1 }}>
                 <MenuItemLink to="/activities">Activities</MenuItemLink>
-                <MenuItemLink to="/createActivity">
-                  Create Activity
-                </MenuItemLink>
                 <MenuItemLink to="/counter">Counter</MenuItemLink>
                 <MenuItemLink to="/errors">Errors</MenuItemLink>
               </Box>
 
               {/* --- USER ACCOUNT MANAGEMENT LINKS --- */}
-              <Box sx={{ flexGrow: 0 }}>
-                <MenuItem
-                  sx={{
-                    fontSize: "1.2rem",
-                    textTransform: "uppercase",
-                    fontWeight: "bold",
-                  }}
-                >
-                  User menu
-                </MenuItem>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                {currentUser ? (
+                  <UserMenu />
+                ) : (
+                  <>
+                    <MenuItemLink to="/login">Login</MenuItemLink>
+                    <MenuItemLink to="/register">Register</MenuItemLink>
+                  </>
+                )}
               </Box>
             </MenuList>
           </Toolbar>
         </Container>
-                <Observer>
-                    {() => uiStore.isLoading ? (
-                    <LinearProgress
-                    color="secondary"
-                    sx={{
-                      position: 'absolute', 
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      height: 4
-                    }}/>    
-                        ) : null }
-                </Observer>
-
+        <Observer>
+          {() =>
+            uiStore.isLoading ? (
+              <LinearProgress
+                color="secondary"
+                sx={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: 4,
+                }}
+              />
+            ) : null
+          }
+        </Observer>
       </AppBar>
     </Box>
   );

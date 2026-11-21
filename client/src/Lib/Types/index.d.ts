@@ -1,3 +1,5 @@
+import type { string } from "zod"
+
 type Activity = {
  id: string
   title: string
@@ -11,7 +13,7 @@ type Activity = {
   longitude: number
  }
 
- export type LocationIQSuggestion = {
+  type LocationIQSuggestion = {
     place_id: string;
     osm_id: string;
     osm_type: string;
@@ -27,7 +29,14 @@ type Activity = {
     address: LocationIQAddress;
 };
 
-export type LocationIQAddress = {
+type User = {
+    id: string 
+    email: string
+    displayName: string
+    imageUrl?: string
+}
+
+ type LocationIQAddress = {
     name?: string;
     house_number?: string;
     road?: string;

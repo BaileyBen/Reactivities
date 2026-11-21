@@ -7,6 +7,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import agent from "../api/agent";
 import { useLocation } from "react-router";
+import type { Activity } from "../Types";
+import { useAccount } from "./useAccount";
 
 // Custom Hook Wrapper: Encapsulates all React Query logic so your components can share it instantly.
 // Parameter (id?): Marked optional with '?' so it works on both list views (no ID) and detail views (has ID).
@@ -14,16 +16,17 @@ export const useActivities = (id?: string) => {
     
     // Instantiating the queryClient to allow cache invalidation across mutations down below.
     const queryClient = useQueryClient();
+    const {currentUser} = useAccount();
     const location = useLocation();
 
-    const {data: activities, isPending} = useQuery({ // stores raw data from api into activities
-    queryKey: ['activities'], // unique locker key identifying this specific global cache list
-    queryFn: async () => { // asynchronous query function that actually executes the API network request
-      const response = await agent.get<Activity[]>('/activities') // fetches typing-enforced Activity arrays
-      return response.data // returns the raw JSON payload to update the cached 'activities' state variable
-    },
-    enabled: !id && location.pathname === '/activities'
-  });
+const { data: activities, isLoading } = useQuery({
+  queryKey: ['activities'],
+  queryFn: async () => {
+    const response = await agent.get<Activity[]>('/activities');
+    return response.data;
+  },
+  enabled: !id && location.pathname === '/activities' && !!currentUser,
+});
 
   // ===================================================================
   // 2. FETCH SINGLE ACTIVITY DETAILS (HTTP GET BY ID)
@@ -92,7 +95,7 @@ export const useActivities = (id?: string) => {
     // to any UI view or React component that executes 'useActivities()'
     return {
         activities,
-        isPending,
+        isLoading,
         updateActivity,
         createActivity,
         deleteActivity,
